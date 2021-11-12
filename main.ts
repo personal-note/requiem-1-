@@ -12,19 +12,12 @@ namespace SpriteKind {
     export const Boss = SpriteKind.create()
     export const bullet = SpriteKind.create()
     export const boom = SpriteKind.create()
+    export const cannon = SpriteKind.create()
 }
 namespace StatusBarKind {
     export const shield = StatusBarKind.create()
     export const power = StatusBarKind.create()
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
-    if (armour.value == 0) {
-        playerhealth.value += -25
-    } else {
-        armour.value += -60
-    }
-    tiles.setTileAt(location, assets.tile`transparency16`)
-})
 function spawnboss () {
 	
 }
@@ -2108,7 +2101,44 @@ statusbars.onStatusReached(StatusBarKind.Health, statusbars.StatusComparison.LTE
     controller.moveSprite(player1, 60, 0)
 })
 function spawncombat () {
-	
+    for (let value of tiles.getTilesByType(assets.tile`myTile4`)) {
+        combat = sprites.create(img`
+            ..............22.........
+            .............266.........
+            .............662.........
+            ......77777..6...........
+            .....776666676...........
+            .....766667676...........
+            .....768887767...........
+            ....76888886687..........
+            ....778818667777.........
+            .....66818666777.........
+            .22.668888866687dd.......
+            .666.7688766688dddd......
+            222..7666766686dddd6.....
+            ......77777688ddd.7766...
+            ........777666ddd..776...
+            ........77777dd7dd.7776..
+            ........76.7dd77dd..776..
+            ........76.dd777dd..7776.
+            ........76.dd7dddd..7776.
+            .......776.ddddddd..7776.
+            ...7777766.bbbdddd..7776.
+            ..777766..bbbbbbbbb.7776.
+            ..7776....bbbbbbbbb.7776.
+            .7776...6bbbbb.bbbbb..76.
+            .776...67bbbb...bbbb.....
+            .776..677bbbb...77bb.....
+            ..776677.bbb.....7777....
+            ..77777..ccc.....cccc....
+            ........cccc......ccc....
+            .......ccccc.....cccc....
+            `, SpriteKind.Enemy)
+        tiles.placeOnRandomTile(combat, assets.tile`myTile4`)
+        tiles.setTileAt(value, assets.tile`transparency16`)
+        statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+        statusbar.attachToSprite(combat)
+    }
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (player1.vy == 0) {
@@ -2168,6 +2198,7 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
             rocket_bar()
             shield2()
             ammo_bar()
+            spawncombat()
             spawnplayer1()
             startlevel()
         }
@@ -2176,6 +2207,7 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
             rocket_bar()
             shield2()
             ammo_bar()
+            spawncombat()
             spawnplayer1()
             startlevel()
         }
@@ -2184,6 +2216,7 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
             rocket_bar()
             shield2()
             ammo_bar()
+            spawncombat()
             spawnplayer1()
             startlevel()
         }
@@ -2192,6 +2225,7 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
             shield2()
             rocket_bar()
             ammo_bar()
+            spawncombat()
             spawnplayer1()
             startlevel()
         }
@@ -3210,6 +3244,9 @@ function startlevel () {
     } else {
         game.over(true, effects.confetti)
     }
+    for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
+        value.destroy()
+    }
     for (let value of tiles.getTilesByType(assets.tile`myTile3`)) {
         tiles.placeOnRandomTile(player1, assets.tile`myTile3`)
         tiles.setTileAt(value, assets.tile`transparency16`)
@@ -3226,6 +3263,31 @@ function ammo_bar () {
     ammobar.setLabel("Ammo")
     ammo = 100
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+    otherSprite.destroy()
+    for (let value of tiles.getTilesByType(assets.tile`myTile0`)) {
+        turret = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . b b b b b b b b c . . . 
+            . . . . b b b b b b b b c . . . 
+            . . . . b b 1 1 1 b b b c . . . 
+            . . . . b b b b 1 1 b b c . . . 
+            . . . . b b b b b b b b c . . . 
+            . . . . b b b b b b b b c . . . 
+            . . . . . . . c c . . . . . . . 
+            . . . . . . c c c . . . . . . . 
+            . . . . . c c c . . . . . . . . 
+            . . . . . c c . . . . . . . . . 
+            . . f f f f f f f f f . . . . . 
+            `, SpriteKind.cannon)
+        tiles.placeOnTile(turret, value)
+        tiles.setTileAt(value, assets.tile`transparency16`)
+    }
+})
 function spawnmboss1 () {
 	
 }
@@ -3249,16 +3311,19 @@ statusbars.onZero(StatusBarKind.Energy, function (status) {
 function spawndrone () {
 	
 }
+let armour: StatusBarSprite = null
+let turret: Sprite = null
 let boomza: Sprite = null
 let level = 0
 let rocketbar: StatusBarSprite = null
 let mag = 0
+let statusbar: StatusBarSprite = null
+let combat: Sprite = null
 let shell: Sprite = null
 let ammobar: StatusBarSprite = null
 let ammo = 0
-let player1: Sprite = null
 let playerhealth: StatusBarSprite = null
-let armour: StatusBarSprite = null
+let player1: Sprite = null
 color.setColor(11, color.rgb(27, 27, 27))
 color.setColor(12, color.rgb(42, 42, 42))
 color.setColor(14, color.rgb(475, 475, 475))
@@ -3513,6 +3578,7 @@ spawnplayer1()
 shield2()
 ammo_bar()
 rocket_bar()
+spawncombat()
 startlevel()
 game.onUpdate(function () {
     player1.ay = 500
