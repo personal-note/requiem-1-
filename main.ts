@@ -3193,30 +3193,6 @@ function spawngooper () {
 function startlevel () {
     if (level == 0) {
         tiles.setTilemap(tilemap`level1`)
-        pause(3000)
-        animation.runImageAnimation(
-        ammo,
-        [img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `],
-        90,
-        false
-        )
     } else if (level == 1) {
         tiles.setTilemap(tilemap`level2`)
     } else if (level == 2) {
