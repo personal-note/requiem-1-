@@ -13,6 +13,7 @@ namespace SpriteKind {
     export const bullet = SpriteKind.create()
     export const boom = SpriteKind.create()
     export const cannon = SpriteKind.create()
+    export const combatform = SpriteKind.create()
 }
 namespace StatusBarKind {
     export const shield = StatusBarKind.create()
@@ -2136,7 +2137,7 @@ function spawncombat () {
             ........cccc......ccc....
             .......ccccc.....cccc....
             .......fffff.....ffff....
-            `, SpriteKind.Food)
+            `, SpriteKind.combatform)
         tiles.placeOnRandomTile(combat, assets.tile`myTile4`)
         tiles.setTileAt(value, assets.tile`transparency16`)
         statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
@@ -2168,6 +2169,14 @@ statusbars.onStatusReached(StatusBarKind.Health, statusbars.StatusComparison.LTE
 function spawnbolt () {
 	
 }
+statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
+    status.spriteAttachedTo().destroy(effects.disintegrate, 500)
+})
+sprites.onOverlap(SpriteKind.bullet, SpriteKind.combatform, function (sprite, otherSprite) {
+    sprite.destroy(effects.ashes, 100)
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -30
+    info.changeScoreBy(1)
+})
 statusbars.onZero(StatusBarKind.Health, function (status) {
     story.startCutscene(function () {
         tiles.destroySpritesOfKind(SpriteKind.Player)
@@ -3313,6 +3322,11 @@ statusbars.onZero(StatusBarKind.Energy, function (status) {
     ammo = 100
     ammobar.value = 100
 })
+sprites.onOverlap(SpriteKind.boom, SpriteKind.combatform, function (sprite, otherSprite) {
+    sprite.destroy(effects.fire, 100)
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -100
+    info.changeScoreBy(5)
+})
 function spawndrone () {
 	
 }
@@ -3588,7 +3602,7 @@ game.onUpdate(function () {
     player1.ay = 500
 })
 game.onUpdate(function () {
-    for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
+    for (let value of sprites.allOfKind(SpriteKind.combatform)) {
         if (value.vy > 1) {
             value.setImage(img`
                 .........................
@@ -3668,9 +3682,9 @@ game.onUpdate(function () {
         80,
         false
         )) {
-            combat.follow(player1, 50)
+            value.follow(player1, 50)
         } else {
-            combat.follow(player1, 0)
+            value.follow(player1, 0)
         }
     }
 })
