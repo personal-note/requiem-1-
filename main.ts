@@ -2190,6 +2190,7 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
             rocket_bar()
             shield2()
             ammo_bar()
+            spawncombat()
             spawnplayer1()
             startlevel()
         }
