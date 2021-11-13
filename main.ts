@@ -2136,7 +2136,7 @@ function spawncombat () {
             ........cccc......ccc....
             .......ccccc.....cccc....
             .......fffff.....ffff....
-            `, SpriteKind.Enemy)
+            `, SpriteKind.Food)
         tiles.placeOnRandomTile(combat, assets.tile`myTile4`)
         tiles.setTileAt(value, assets.tile`transparency16`)
         statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
@@ -3249,12 +3249,12 @@ function startlevel () {
     } else {
         game.over(true, effects.confetti)
     }
-    for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
-        value.destroy()
-    }
     for (let value of tiles.getTilesByType(assets.tile`myTile3`)) {
         tiles.placeOnRandomTile(player1, assets.tile`myTile3`)
         tiles.setTileAt(value, assets.tile`transparency16`)
+    }
+    for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
+        value.destroy()
     }
 }
 function ammo_bar () {
@@ -3661,6 +3661,16 @@ game.onUpdate(function () {
                 .......ccccc.....cccc....
                 .......fffff.....ffff....
                 `)
+        }
+        if (sight.isInSight(
+        value,
+        player1,
+        80,
+        false
+        )) {
+            combat.follow(player1, 50)
+        } else {
+            combat.follow(player1, 0)
         }
     }
 })
