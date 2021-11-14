@@ -2179,21 +2179,7 @@ sprites.onOverlap(SpriteKind.bullet, SpriteKind.combatform, function (sprite, ot
 })
 statusbars.onZero(StatusBarKind.Health, function (status) {
     story.startCutscene(function () {
-        tiles.destroySpritesOfKind(SpriteKind.Player)
-        tiles.destroySpritesOfKind(SpriteKind.Enemy)
-        tiles.destroySpritesOfKind(SpriteKind.Bolt)
-        tiles.destroySpritesOfKind(SpriteKind.Gooper)
-        tiles.destroySpritesOfKind(SpriteKind.Charger)
-        tiles.destroySpritesOfKind(SpriteKind.Drone)
-        tiles.destroySpritesOfKind(SpriteKind.EMPI)
-        tiles.destroySpritesOfKind(SpriteKind.F1)
-        tiles.destroySpritesOfKind(SpriteKind.F2)
-        tiles.destroySpritesOfKind(SpriteKind.F3)
-        tiles.destroySpritesOfKind(SpriteKind.F5)
-        tiles.destroySpritesOfKind(SpriteKind.Boss)
-        tiles.destroySpritesOfKind(SpriteKind.StatusBar)
-        tiles.destroySpritesOfKind(SpriteKind.bullet)
-        tiles.destroySpritesOfKind(SpriteKind.boom)
+        kill_all()
         tiles.setTilemap(tilemap`level6`)
         story.printCharacterText("YOU DIED")
         story.showPlayerChoices("RESTART LEVEL", "GAME OVER")
@@ -3222,6 +3208,23 @@ controller.player2.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.P
         }
     }
 })
+function kill_all () {
+    tiles.destroySpritesOfKind(SpriteKind.Player)
+    tiles.destroySpritesOfKind(SpriteKind.combatform)
+    tiles.destroySpritesOfKind(SpriteKind.Bolt)
+    tiles.destroySpritesOfKind(SpriteKind.Gooper)
+    tiles.destroySpritesOfKind(SpriteKind.Charger)
+    tiles.destroySpritesOfKind(SpriteKind.Drone)
+    tiles.destroySpritesOfKind(SpriteKind.EMPI)
+    tiles.destroySpritesOfKind(SpriteKind.F1)
+    tiles.destroySpritesOfKind(SpriteKind.F2)
+    tiles.destroySpritesOfKind(SpriteKind.F3)
+    tiles.destroySpritesOfKind(SpriteKind.F5)
+    tiles.destroySpritesOfKind(SpriteKind.Boss)
+    tiles.destroySpritesOfKind(SpriteKind.StatusBar)
+    tiles.destroySpritesOfKind(SpriteKind.bullet)
+    tiles.destroySpritesOfKind(SpriteKind.boom)
+}
 function spawncharger () {
 	
 }
