@@ -2713,8 +2713,8 @@ sprites.onOverlap(SpriteKind.bullet, SpriteKind.combatform, function (sprite, ot
     info.changeScoreBy(1)
 })
 statusbars.onZero(StatusBarKind.Health, function (status) {
+    kill_all()
     story.startCutscene(function () {
-        kill_all()
         tiles.setTilemap(tilemap`level6`)
         story.printCharacterText("YOU DIED")
         story.showPlayerChoices("RESTART LEVEL", "GAME OVER")
@@ -3758,43 +3758,11 @@ function kill_all () {
     tiles.destroySpritesOfKind(SpriteKind.Boss)
     tiles.destroySpritesOfKind(SpriteKind.StatusBar)
     if (controller.B.isPressed()) {
-        projectile = sprites.createProjectileFromSprite(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, player1, 50, 50)
+        shell.destroy()
+        tiles.destroySpritesOfKind(SpriteKind.bullet)
     } else if (controller.player2.isPressed(ControllerButton.Right)) {
-        projectile = sprites.createProjectileFromSprite(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, player1, 50, 50)
+        boomza.destroy()
+        tiles.destroySpritesOfKind(SpriteKind.boom)
     }
 }
 function spawncharger () {
@@ -3902,11 +3870,14 @@ sprites.onOverlap(SpriteKind.boom, SpriteKind.combatform, function (sprite, othe
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -100
     info.changeScoreBy(5)
 })
+controller.combos.attachSpecialCode(function () {
+    player1.startEffect(effects.confetti, 500)
+    playerhealth.value = 100
+})
 function spawndrone () {
 	
 }
 let turret: Sprite = null
-let projectile: Sprite = null
 let boomza: Sprite = null
 let level = 0
 let armour: StatusBarSprite = null
