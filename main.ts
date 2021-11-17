@@ -2191,6 +2191,13 @@ function rocket_bar () {
     rocketbar.setLabel("RPG")
     mag = 100
 }
+controller.combos.attachCombo("UD", function () {
+    player1.sayText("Sprint engaged.", 500, false)
+    controller.moveSprite(player1, 180, 0)
+    timer.after(3000, function () {
+        controller.moveSprite(player1, 120, 0)
+    })
+})
 statusbars.onStatusReached(StatusBarKind.Health, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 50, function (status) {
     if (player1.vy == 0 && controller.A.isPressed()) {
         player1.vy = -180
@@ -2202,8 +2209,10 @@ function spawnbolt () {
 }
 sprites.onOverlap(SpriteKind.combatform, SpriteKind.Player, function (sprite, otherSprite) {
     if (character.matchesRule(otherSprite, character.rule(Predicate.FacingLeft))) {
+        otherSprite.y += -10
         otherSprite.x += 40
     } else {
+        otherSprite.y += -10
         otherSprite.x += -40
     }
     if (character.matchesRule(sprite, character.rule(Predicate.FacingRight))) {
@@ -2698,7 +2707,7 @@ sprites.onOverlap(SpriteKind.combatform, SpriteKind.Player, function (sprite, ot
         )
     }
     if (armour.value == 0) {
-        playerhealth.value += -5
+        playerhealth.value += -10
     } else {
         armour.value += -5
     }
@@ -3897,17 +3906,15 @@ statusbars.onZero(StatusBarKind.Energy, function (status) {
     ammo = 100
     ammobar.value = 100
 })
-controller.combos.attachCombo("UU", function () {
-    player1.sayText("Sprint engaged.", 500, false)
-    controller.moveSprite(player1, 180, 0)
-    timer.after(3000, function () {
-        controller.moveSprite(player1, 120, 0)
-    })
-})
 sprites.onOverlap(SpriteKind.boom, SpriteKind.combatform, function (sprite, otherSprite) {
     sprite.destroy(effects.fire, 100)
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -100
     info.changeScoreBy(5)
+})
+controller.combos.attachSpecialCode(function () {
+    player1.startEffect(effects.confetti, 500)
+    armour.value = 100
+    playerhealth.value = 100
 })
 function spawndrone () {
 	
