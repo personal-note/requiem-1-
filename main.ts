@@ -26,10 +26,11 @@ function spawnmboss3 () {
 	
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
+    controller.moveSprite(player1, 0, 0)
     story.startCutscene(function () {
         Achievements.showAchievement(
         "SECRET EASTER EGG",
-        "Perform the secret glitch that shows you my name",
+        "",
         1,
         img`
             . . . . . . . . . . . . . . . . 
@@ -2696,7 +2697,11 @@ sprites.onOverlap(SpriteKind.combatform, SpriteKind.Player, function (sprite, ot
         false
         )
     }
-    playerhealth.value += -5
+    if (armour.value == 0) {
+        playerhealth.value += -5
+    } else {
+        armour.value += -5
+    }
     scene.cameraShake(3, 500)
 })
 statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
@@ -3752,8 +3757,45 @@ function kill_all () {
     tiles.destroySpritesOfKind(SpriteKind.F5)
     tiles.destroySpritesOfKind(SpriteKind.Boss)
     tiles.destroySpritesOfKind(SpriteKind.StatusBar)
-    tiles.destroySpritesOfKind(SpriteKind.bullet)
-    tiles.destroySpritesOfKind(SpriteKind.boom)
+    if (controller.B.isPressed()) {
+        projectile = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, player1, 50, 50)
+    } else if (controller.player2.isPressed(ControllerButton.Right)) {
+        projectile = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, player1, 50, 50)
+    }
 }
 function spawncharger () {
 	
@@ -3863,10 +3905,11 @@ sprites.onOverlap(SpriteKind.boom, SpriteKind.combatform, function (sprite, othe
 function spawndrone () {
 	
 }
-let armour: StatusBarSprite = null
 let turret: Sprite = null
+let projectile: Sprite = null
 let boomza: Sprite = null
 let level = 0
+let armour: StatusBarSprite = null
 let rocketbar: StatusBarSprite = null
 let mag = 0
 let statusbar: StatusBarSprite = null
@@ -3874,8 +3917,8 @@ let combat: Sprite = null
 let shell: Sprite = null
 let ammobar: StatusBarSprite = null
 let ammo = 0
-let player1: Sprite = null
 let playerhealth: StatusBarSprite = null
+let player1: Sprite = null
 color.setColor(11, color.rgb(27, 27, 27))
 color.setColor(12, color.rgb(42, 42, 42))
 color.setColor(14, color.rgb(475, 475, 475))
